@@ -1,0 +1,5 @@
+{
+  "name": "Microservice Wallet System",
+  "description": "A microservice-based wallet system built with NestJS, Prisma, PostgreSQL, and gRPC.",
+  "requestFramePermissions": []
+}

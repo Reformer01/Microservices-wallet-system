@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package wallet;
+
+service WalletService {
+  rpc CreateWallet (CreateWalletRequest) returns (WalletResponse) {}
+  rpc GetWallet (GetWalletRequest) returns (WalletResponse) {}
+  rpc CreditWallet (CreditWalletRequest) returns (WalletResponse) {}
+  rpc DebitWallet (DebitWalletRequest) returns (WalletResponse) {}
+}
+
+message CreateWalletRequest {
+  string userId = 1;
+}
+
+message GetWalletRequest {
+  string userId = 1;
+}
+
+message CreditWalletRequest {
+  string userId = 1;
+  double amount = 2;
+}
+
+message DebitWalletRequest {
+  string userId = 1;
+  double amount = 2;
+}
+
+message WalletResponse {
+  string id = 1;
+  string userId = 2;
+  double balance = 3;
+  string createdAt = 4;
+}
