@@ -104,6 +104,7 @@ The Gateway will be available at `http://localhost:3000`.
 - **Transactions**: Debiting uses Prisma `$transaction` to ensure data integrity and prevent overdrafts.
 - **Validation**: Input validation implemented using `class-validator` in the Gateway.
 - **Error Handling**: Robust error handling with specific gRPC status codes (NOT_FOUND, ALREADY_EXISTS, FAILED_PRECONDITION).
+- **Logging**: Structured logging implemented using `nestjs-pino` and `pino-pretty` for better observability.
 - **Monorepo Structure**: Organized into `apps/` and `packages/` for scalability.
 
 ## Testing with Curl

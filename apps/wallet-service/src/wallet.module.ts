@@ -1,11 +1,17 @@
 import { Module } from '@nestjs/common';
 import { ClientsModule, Transport } from '@nestjs/microservices';
+import { LoggerModule } from 'nestjs-pino';
 import { join } from 'path';
 import { WalletController } from './wallet.controller';
 import { PrismaService } from './prisma.service';
 
 @Module({
   imports: [
+    LoggerModule.forRoot({
+      pinoHttp: {
+        transport: { target: 'pino-pretty' },
+      },
+    }),
     ClientsModule.register([
       {
         name: 'USER_PACKAGE',
