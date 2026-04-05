@@ -1,6 +1,5 @@
-Microservices-wallet-system
 Microservice-Based Wallet System
-The project follows a monorepo structure:
+The project structure:
 
 apps/user-service: Manages user data and provides gRPC endpoints.
 apps/wallet-service: Manages wallet balances, communicates with user-service via gRPC.
