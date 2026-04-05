@@ -5,6 +5,14 @@ package user;
 service UserService {
   rpc CreateUser (CreateUserRequest) returns (UserResponse) {}
   rpc GetUserById (GetUserByIdRequest) returns (UserResponse) {}
+  rpc HealthCheck (HealthCheckRequest) returns (HealthCheckResponse) {}
+}
+
+message HealthCheckRequest {}
+
+message HealthCheckResponse {
+  string status = 1;
+  string database = 2;
 }
 
 message CreateUserRequest {

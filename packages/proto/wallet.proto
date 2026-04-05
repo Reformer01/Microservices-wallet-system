@@ -8,6 +8,14 @@ service WalletService {
   rpc CreditWallet (CreditWalletRequest) returns (WalletResponse) {}
   rpc DebitWallet (DebitWalletRequest) returns (WalletResponse) {}
   rpc GetTransactions (GetTransactionsRequest) returns (TransactionsResponse) {}
+  rpc HealthCheck (HealthCheckRequest) returns (HealthCheckResponse) {}
+}
+
+message HealthCheckRequest {}
+
+message HealthCheckResponse {
+  string status = 1;
+  string database = 2;
 }
 
 message CreateWalletRequest {

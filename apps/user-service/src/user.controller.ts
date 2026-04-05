@@ -84,4 +84,18 @@ export class UserController {
       throw error;
     }
   }
+
+  @GrpcMethod('UserService', 'HealthCheck')
+  async healthCheck() {
+    let dbStatus = 'UP';
+    try {
+      await this.prisma.$queryRaw`SELECT 1`;
+    } catch (error) {
+      dbStatus = 'DOWN';
+    }
+    return {
+      status: 'UP',
+      database: dbStatus,
+    };
+  }
 }

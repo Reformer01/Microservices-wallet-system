@@ -6,6 +6,7 @@ import { CreateUserDto, CreateWalletDto, TransactionDto } from './dto';
 interface UserServiceClient {
   createUser(data: { email: string; name: string }): any;
   getUserById(data: { id: string }): any;
+  healthCheck(data: {}): any;
 }
 
 interface WalletServiceClient {
@@ -14,6 +15,7 @@ interface WalletServiceClient {
   creditWallet(data: { userId: string; amount: number; idempotencyKey: string }): any;
   debitWallet(data: { userId: string; amount: number; idempotencyKey: string }): any;
   getTransactions(data: { userId: string }): any;
+  healthCheck(data: {}): any;
 }
 
 @Controller()
@@ -29,6 +31,30 @@ export class GatewayController implements OnModuleInit {
   onModuleInit() {
     this.userService = this.userClient.getService<UserServiceClient>('UserService');
     this.walletService = this.walletClient.getService<WalletServiceClient>('WalletService');
+  }
+
+  @Get('health')
+  async getHealth() {
+    const health: any = {
+      gateway: 'UP',
+      services: {},
+    };
+
+    try {
+      const userHealth = await firstValueFrom(this.userService.healthCheck({}));
+      health.services.userService = userHealth;
+    } catch (error) {
+      health.services.userService = { status: 'DOWN', error: error.message };
+    }
+
+    try {
+      const walletHealth = await firstValueFrom(this.walletService.healthCheck({}));
+      health.services.walletService = walletHealth;
+    } catch (error) {
+      health.services.walletService = { status: 'DOWN', error: error.message };
+    }
+
+    return health;
   }
 
   @Post('users')

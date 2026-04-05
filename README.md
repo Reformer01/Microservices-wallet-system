@@ -77,6 +77,10 @@ Body:
   "idempotencyKey": "unique-request-id-2"
 }
 
+7. Health Check
+URL: GET /health
+Returns the status of the gateway and all microservices, including database connectivity.
+
 Features & Bonus Points
 gRPC Communication: Services communicate using high-performance gRPC.
 Inter-Service Verification: Wallet Service verifies user existence via User Service before creating a wallet.
