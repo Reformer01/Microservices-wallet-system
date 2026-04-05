@@ -1,9 +1,5 @@
 # Microservice-Based Wallet System
 
-This project is a technical assessment for a Backend Engineer role. It implements a microservice-based wallet system using NestJS, Prisma ORM, PostgreSQL, and gRPC communication.
-
-## Architecture
-
 The project follows a monorepo structure:
 - `apps/user-service`: Manages user data and provides gRPC endpoints.
 - `apps/wallet-service`: Manages wallet balances, communicates with `user-service` via gRPC.
@@ -29,7 +25,6 @@ The project follows a monorepo structure:
    ```env
    DATABASE_URL="postgresql://user:password@localhost:5432/wallet_db"
    ```
-   *Note: For this assessment environment, you may need to adjust the provider in `packages/prisma/schema.prisma` to `sqlite` if you don't have a PostgreSQL server running.*
 
 3. **Run Migrations**:
    ```bash
