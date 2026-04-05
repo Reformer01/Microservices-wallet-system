@@ -6,3 +6,8 @@ coverage/
 *.log
 .env*
 !.env.example
+*.db
+*.db-journal
+/node_modules
+/dist
+/build

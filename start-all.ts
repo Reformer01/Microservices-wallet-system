@@ -1,7 +1,11 @@
 import { spawn } from 'child_process';
 
 function runService(name: string, command: string, args: string[]) {
-  const child = spawn(command, args, { stdio: 'inherit', shell: true });
+  const child = spawn(command, args, { 
+    stdio: 'inherit', 
+    shell: true,
+    env: { ...process.env }
+  });
   child.on('error', (err) => {
     console.error(`Failed to start ${name}:`, err);
   });
@@ -13,11 +17,22 @@ function runService(name: string, command: string, args: string[]) {
 
 console.log('Starting all services...');
 
-// Run User Service
-runService('User Service', 'npx', ['tsx', 'apps/user-service/src/main.ts']);
+// Run Prisma generate
+console.log('Generating Prisma Client...');
+const prismaGenerate = spawn('npx', ['prisma', 'generate', '--schema=packages/prisma/schema.prisma'], { stdio: 'inherit', shell: true });
 
-// Run Wallet Service
-runService('Wallet Service', 'npx', ['tsx', 'apps/wallet-service/src/main.ts']);
+prismaGenerate.on('exit', (code) => {
+  if (code !== 0) {
+    console.error('Prisma generate failed, exiting...');
+    process.exit(code || 1);
+  }
 
-// Run Gateway
-runService('Gateway', 'npx', ['tsx', 'apps/gateway/src/main.ts']);
+  // Run User Service
+  runService('User Service', 'npx', ['tsx', 'apps/user-service/src/main.ts']);
+
+  // Run Wallet Service
+  runService('Wallet Service', 'npx', ['tsx', 'apps/wallet-service/src/main.ts']);
+
+  // Run Gateway
+  runService('Gateway', 'npx', ['tsx', 'apps/gateway/src/main.ts']);
+});

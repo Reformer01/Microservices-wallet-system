@@ -6,7 +6,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -19,9 +19,19 @@ model User {
 }
 
 model Wallet {
+  id           String        @id @default(uuid())
+  userId       String        @unique
+  user         User          @relation(fields: [userId], references: [id])
+  balance      Float         @default(0)
+  createdAt    DateTime      @default(now())
+  transactions Transaction[]
+}
+
+model Transaction {
   id        String   @id @default(uuid())
-  userId    String   @unique
-  user      User     @relation(fields: [userId], references: [id])
-  balance   Float    @default(0)
+  walletId  String
+  wallet    Wallet   @relation(fields: [walletId], references: [id])
+  type      String // "CREDIT" or "DEBIT"
+  amount    Float
   createdAt DateTime @default(now())
 }

@@ -13,6 +13,7 @@ interface WalletServiceClient {
   getWallet(data: { userId: string }): any;
   creditWallet(data: { userId: string; amount: number }): any;
   debitWallet(data: { userId: string; amount: number }): any;
+  getTransactions(data: { userId: string }): any;
 }
 
 @Controller()
@@ -58,5 +59,10 @@ export class GatewayController implements OnModuleInit {
   @Post('wallets/debit')
   async debitWallet(@Body() data: TransactionDto) {
     return await firstValueFrom(this.walletService.debitWallet(data));
+  }
+
+  @Get('wallets/:userId/transactions')
+  async getTransactions(@Param('userId') userId: string) {
+    return await firstValueFrom(this.walletService.getTransactions({ userId }));
   }
 }

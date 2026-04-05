@@ -7,6 +7,7 @@ service WalletService {
   rpc GetWallet (GetWalletRequest) returns (WalletResponse) {}
   rpc CreditWallet (CreditWalletRequest) returns (WalletResponse) {}
   rpc DebitWallet (DebitWalletRequest) returns (WalletResponse) {}
+  rpc GetTransactions (GetTransactionsRequest) returns (TransactionsResponse) {}
 }
 
 message CreateWalletRequest {
@@ -25,6 +26,21 @@ message CreditWalletRequest {
 message DebitWalletRequest {
   string userId = 1;
   double amount = 2;
+}
+
+message GetTransactionsRequest {
+  string userId = 1;
+}
+
+message Transaction {
+  string id = 1;
+  string type = 2;
+  double amount = 3;
+  string createdAt = 4;
+}
+
+message TransactionsResponse {
+  repeated Transaction transactions = 1;
 }
 
 message WalletResponse {

@@ -81,20 +81,32 @@ export class WalletController implements OnModuleInit {
       });
     }
 
-    const wallet = await this.prisma.wallet.update({
-      where: { userId: data.userId },
-      data: {
-        balance: {
-          increment: data.amount,
+    return await this.prisma.$transaction(async (tx) => {
+      const wallet = await tx.wallet.update({
+        where: { userId: data.userId },
+        data: {
+          balance: {
+            increment: data.amount,
+          },
         },
-      },
+      });
+
+      // Record transaction
+      await tx.transaction.create({
+        data: {
+          walletId: wallet.id,
+          type: 'CREDIT',
+          amount: data.amount,
+        },
+      });
+
+      return {
+        id: wallet.id,
+        userId: wallet.userId,
+        balance: wallet.balance,
+        createdAt: wallet.createdAt.toISOString(),
+      };
     });
-    return {
-      id: wallet.id,
-      userId: wallet.userId,
-      balance: wallet.balance,
-      createdAt: wallet.createdAt.toISOString(),
-    };
   }
 
   @GrpcMethod('WalletService', 'DebitWallet')
@@ -134,6 +146,15 @@ export class WalletController implements OnModuleInit {
         },
       });
 
+      // Record transaction
+      await tx.transaction.create({
+        data: {
+          walletId: wallet.id,
+          type: 'DEBIT',
+          amount: data.amount,
+        },
+      });
+
       return {
         id: updatedWallet.id,
         userId: updatedWallet.userId,
@@ -141,5 +162,33 @@ export class WalletController implements OnModuleInit {
         createdAt: updatedWallet.createdAt.toISOString(),
       };
     });
+  }
+
+  @GrpcMethod('WalletService', 'GetTransactions')
+  async getTransactions(data: { userId: string }) {
+    const wallet = await this.prisma.wallet.findUnique({
+      where: { userId: data.userId },
+      include: {
+        transactions: {
+          orderBy: { createdAt: 'desc' },
+        },
+      },
+    });
+
+    if (!wallet) {
+      throw new RpcException({
+        code: 5, // NOT_FOUND
+        message: 'Wallet not found',
+      });
+    }
+
+    return {
+      transactions: wallet.transactions.map((t) => ({
+        id: t.id,
+        type: t.type,
+        amount: t.amount,
+        createdAt: t.createdAt.toISOString(),
+      })),
+    };
   }
 }
