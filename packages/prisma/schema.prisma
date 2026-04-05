@@ -11,11 +11,12 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  name      String
-  createdAt DateTime @default(now())
-  wallet    Wallet?
+  id             String   @id @default(uuid())
+  email          String   @unique
+  name           String
+  idempotencyKey String?  @unique
+  createdAt      DateTime @default(now())
+  wallet         Wallet?
 }
 
 model Wallet {
@@ -28,7 +29,8 @@ model Wallet {
 }
 
 model Transaction {
-  id             String   @id @default(uuid())
+  id             Int      @id @default(autoincrement())
+  transactionId  String   @unique @default(uuid())
   walletId       String
   wallet         Wallet   @relation(fields: [walletId], references: [id])
   type           String // "CREDIT" or "DEBIT"

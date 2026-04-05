@@ -7,6 +7,10 @@ export class CreateUserDto {
   @IsString()
   @IsNotEmpty()
   name: string;
+
+  @IsString()
+  @IsNotEmpty()
+  idempotencyKey: string;
 }
 
 export class CreateWalletDto {

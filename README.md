@@ -43,7 +43,8 @@ URL: POST /users
 Body:
 {
   "email": "john@example.com",
-  "name": "John Doe"
+  "name": "John Doe",
+  "idempotencyKey": "unique-user-key-1"
 }
 
 2. Get User
@@ -77,7 +78,15 @@ Body:
   "idempotencyKey": "unique-request-id-2"
 }
 
-7. Health Check
+7. Get Transaction History
+URL: GET /wallets/:userId/transactions
+Optional Query Parameters:
+- `type`: Filter by transaction type (`CREDIT` or `DEBIT`).
+- `startDate`: Filter transactions from this date (ISO 8601 format).
+- `endDate`: Filter transactions up to this date (ISO 8601 format).
+Example: `GET /wallets/user-uuid/transactions?type=CREDIT&startDate=2026-04-01T00:00:00Z`
+
+8. Health Check
 URL: GET /health
 Returns the status of the gateway and all microservices, including database connectivity.
 
@@ -93,7 +102,7 @@ Monorepo Structure: Organized into apps/ and packages/ for scalability.
 Testing with Curl
 Create User:
 
-curl -X POST http://localhost:3000/users -H "Content-Type: application/json" -d '{"email": "test@test.com", "name": "Test User"}'
+curl -X POST http://localhost:3000/users -H "Content-Type: application/json" -d '{"email": "test@test.com", "name": "Test User", "idempotencyKey": "unique-user-key-1"}'
 
 Create Wallet:
 

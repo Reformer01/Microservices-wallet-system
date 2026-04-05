@@ -1,10 +1,10 @@
-import { Controller, Post, Get, Body, Param, Inject, OnModuleInit } from '@nestjs/common';
+import { Controller, Post, Get, Body, Param, Inject, OnModuleInit, Query } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
 import { CreateUserDto, CreateWalletDto, TransactionDto } from './dto';
 
 interface UserServiceClient {
-  createUser(data: { email: string; name: string }): any;
+  createUser(data: { email: string; name: string; idempotencyKey: string }): any;
   getUserById(data: { id: string }): any;
   healthCheck(data: {}): any;
 }
@@ -14,7 +14,7 @@ interface WalletServiceClient {
   getWallet(data: { userId: string }): any;
   creditWallet(data: { userId: string; amount: number; idempotencyKey: string }): any;
   debitWallet(data: { userId: string; amount: number; idempotencyKey: string }): any;
-  getTransactions(data: { userId: string }): any;
+  getTransactions(data: { userId: string; type?: string; startDate?: string; endDate?: string }): any;
   healthCheck(data: {}): any;
 }
 
@@ -88,7 +88,12 @@ export class GatewayController implements OnModuleInit {
   }
 
   @Get('wallets/:userId/transactions')
-  async getTransactions(@Param('userId') userId: string) {
-    return await firstValueFrom(this.walletService.getTransactions({ userId }));
+  async getTransactions(
+    @Param('userId') userId: string,
+    @Query('type') type?: string,
+    @Query('startDate') startDate?: string,
+    @Query('endDate') endDate?: string,
+  ) {
+    return await firstValueFrom(this.walletService.getTransactions({ userId, type, startDate, endDate }));
   }
 }

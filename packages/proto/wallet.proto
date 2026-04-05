@@ -40,13 +40,17 @@ message DebitWalletRequest {
 
 message GetTransactionsRequest {
   string userId = 1;
+  string type = 2;
+  string startDate = 3;
+  string endDate = 4;
 }
 
 message Transaction {
-  string id = 1;
-  string type = 2;
-  double amount = 3;
-  string createdAt = 4;
+  int32 id = 1;
+  string transactionId = 2;
+  string type = 3;
+  double amount = 4;
+  string createdAt = 5;
 }
 
 message TransactionsResponse {
@@ -58,4 +62,5 @@ message WalletResponse {
   string userId = 2;
   double balance = 3;
   string createdAt = 4;
+  string transactionId = 5;
 }
