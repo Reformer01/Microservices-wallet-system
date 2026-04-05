@@ -23,4 +23,8 @@ export class TransactionDto {
   @IsNumber()
   @Min(0.01)
   amount: number;
+
+  @IsString()
+  @IsNotEmpty()
+  idempotencyKey: string;
 }

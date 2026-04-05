@@ -64,7 +64,8 @@ URL: POST /wallets/credit
 Body:
 {
   "userId": "user-uuid",
-  "amount": 100.0
+  "amount": 100.0,
+  "idempotencyKey": "unique-request-id-1"
 }
 
 6. Debit Wallet
@@ -72,7 +73,8 @@ URL: POST /wallets/debit
 Body:
 {
   "userId": "user-uuid",
-  "amount": 50.0
+  "amount": 50.0,
+  "idempotencyKey": "unique-request-id-2"
 }
 
 Features & Bonus Points
@@ -95,8 +97,8 @@ curl -X POST http://localhost:3000/wallets -H "Content-Type: application/json" -
 
 Credit Wallet:
 
-curl -X POST http://localhost:3000/wallets/credit -H "Content-Type: application/json" -d '{"userId": "REPLACE_WITH_USER_ID", "amount": 100}'
+curl -X POST http://localhost:3000/wallets/credit -H "Content-Type: application/json" -d '{"userId": "REPLACE_WITH_USER_ID", "amount": 100, "idempotencyKey": "unique-id-1"}'
 
 Debit Wallet:
 
-curl -X POST http://localhost:3000/wallets/debit -H "Content-Type: application/json" -d '{"userId": "REPLACE_WITH_USER_ID", "amount": 50}'
+curl -X POST http://localhost:3000/wallets/debit -H "Content-Type: application/json" -d '{"userId": "REPLACE_WITH_USER_ID", "amount": 50, "idempotencyKey": "unique-id-2"}'

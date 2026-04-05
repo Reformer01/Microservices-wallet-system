@@ -21,11 +21,13 @@ message GetWalletRequest {
 message CreditWalletRequest {
   string userId = 1;
   double amount = 2;
+  string idempotencyKey = 3;
 }
 
 message DebitWalletRequest {
   string userId = 1;
   double amount = 2;
+  string idempotencyKey = 3;
 }
 
 message GetTransactionsRequest {

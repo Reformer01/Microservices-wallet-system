@@ -11,8 +11,8 @@ interface UserServiceClient {
 interface WalletServiceClient {
   createWallet(data: { userId: string }): any;
   getWallet(data: { userId: string }): any;
-  creditWallet(data: { userId: string; amount: number }): any;
-  debitWallet(data: { userId: string; amount: number }): any;
+  creditWallet(data: { userId: string; amount: number; idempotencyKey: string }): any;
+  debitWallet(data: { userId: string; amount: number; idempotencyKey: string }): any;
   getTransactions(data: { userId: string }): any;
 }
 

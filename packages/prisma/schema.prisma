@@ -28,10 +28,11 @@ model Wallet {
 }
 
 model Transaction {
-  id        String   @id @default(uuid())
-  walletId  String
-  wallet    Wallet   @relation(fields: [walletId], references: [id])
-  type      String // "CREDIT" or "DEBIT"
-  amount    Float
-  createdAt DateTime @default(now())
+  id             String   @id @default(uuid())
+  walletId       String
+  wallet         Wallet   @relation(fields: [walletId], references: [id])
+  type           String // "CREDIT" or "DEBIT"
+  amount         Float
+  idempotencyKey String?  @unique
+  createdAt      DateTime @default(now())
 }
